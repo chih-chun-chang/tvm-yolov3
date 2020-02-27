@@ -54,7 +54,7 @@ dets = yolov3.run(config)
 print(dets)
 ```
 
-device_type: `llvm`(cpu) / `cuda` / `cuda-cudnn`
+device_type: `llvm` / `cuda` / `cuda-cudnn`
 
 autotune: `True` / `False`
 
