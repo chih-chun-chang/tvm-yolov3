@@ -15,7 +15,7 @@ This is a demo of yolov3 on TVM.
     
     2. Download llvm pre-built binary from [here](http://releases.llvm.org/download.html) (depends on your OS)
     
-    > unzip llvm directory under `tvm-yolov3/`
+    ###### unzip llvm directory under `tvm-yolov3/`
     
     3. Compile (modify `build/cmake.config` if needed)
     
@@ -28,7 +28,7 @@ This is a demo of yolov3 on TVM.
     
     `pip install -r requirements.txt`
     
-    ###### for other TVM intallation issues please refer to the [website](https://docs.tvm.ai/install/from_source.html)
+    > for other TVM intallation issues please refer to the [website](https://docs.tvm.ai/install/from_source.html)
     
 2. **Prepare Data**
 
@@ -63,9 +63,9 @@ autotune: `True` / `False`
 ```
 ```
 
-###### !!!   The fastest method is cuda with autotuning acceleration while you have to run `python autotuning.py` first to generate the log file.
+> !!!   The fastest method is cuda with autotuning acceleration while you have to run `python autotuning.py` first to generate the log file.
 
-###### !!!   It takes times.
+> !!!   It takes times.
 
 ## Results: (RTX 2080 Ti)
 
