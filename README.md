@@ -43,8 +43,8 @@ config = {
     'image_path': 'test.jpg',
     'cfg_path': 'yolov3.cfg',
     'weights_path': 'yolov3.weights',
-    'device_type': 'cuda-cudnn',
-    'autotune': True,
+    'device_type': 'cuda-cudnn',            # device_type: llvm / cuda / cuda-cudnn
+    'autotune': True,                       autotune: True / False
     'log_file': 'yolov3_auto.log',
     'thresh': 0.5,
     'nms_thresh': 0.45
@@ -53,10 +53,6 @@ config = {
 dets = yolov3.run(config)
 print(dets)
 ```
-
-device_type: `llvm` / `cuda` / `cuda-cudnn`
-
-autotune: `True` / `False`
 
 * Sample Output: (bbox coordinates with confidences and label)
 
