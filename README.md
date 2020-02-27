@@ -44,7 +44,7 @@ config = {
     'cfg_path': 'yolov3.cfg',
     'weights_path': 'yolov3.weights',
     'device_type': 'cuda-cudnn',            # device_type: llvm / cuda / cuda-cudnn
-    'autotune': True,                       autotune: True / False
+    'autotune': True,                       # autotune: True / False
     'log_file': 'yolov3_auto.log',
     'thresh': 0.5,
     'nms_thresh': 0.45
