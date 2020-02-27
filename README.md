@@ -36,11 +36,9 @@ This is a demo of yolov3 on TVM.
 
 ## Run and Testing
 
-`import tvm.relay.frontend.yolov3 as yolov3`
-
-* Input args samples:
-
 ```
+import tvm.relay.frontend.yolov3 as yolov3
+
 config = { 
     'image_path': 'test.jpg',
     'cfg_path': 'yolov3.cfg',
@@ -51,29 +49,30 @@ config = {
     'thresh': 0.5,
     'nms_thresh': 0.45
 }
+
+dets = yolov3.run(config)
+print(dets)
 ```
 
 device_type: `llvm`(cpu) / `cuda` / `cuda-cudnn`
 
 autotune: `True` / `False`
 
-###### !!! The fastest method is cuda with autotuning acceleration while you have to run `python autotuning.py` first.
+* Sample Output: (bbox coordinates with confidences and label)
 
-* Output samples: (bbox coordinates with confidences and label)
+```
+```
 
+###### !!!   The fastest method is cuda with autotuning acceleration while you have to run `python autotuning.py` first to generate the log file.
 
-There is a sample code for you. `yolov3_example.py`
+###### !!!   It takes times.
 
-* Autotvm usage: `python autotuning.py` to generate the log file.
+## Results: (RTX 2080 Ti)
 
-###### !!! It takes times.
+|               | Darknet        | TVM           | AutoTVM      |
+|-------------  | -------------: |:-------------:| -------:     |
+|cuda10.2       | 300~600ms      | ~170ms        | **7~8ms**    |
+|cuda10.2+cudnn7| ~13ms          | 8~9ms         |   -          |
 
-## Results:
-
-| Tables        | Are           | Cool  |
-| ------------- |:-------------:| -----:|
-| col 3 is      | right-aligned | $1600 |
-| col 2 is      | centered      |   $12 |
-| zebra stripes | are neat      |    $1 |
 
     
