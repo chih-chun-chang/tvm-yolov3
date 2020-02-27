@@ -99,9 +99,8 @@ Mean inference time (std dev): 3.16 ms (0.03 ms)
 |cuda10.2       | 300~600ms      | ~170ms        | **7~8ms**    |
 |cuda10.2+cudnn7| ~13ms          | 8~9ms         |   -          |
 
-
-![alt text](https://github.com/gary30404/tvm-yolov3/blob/master/dog.jpg "dog.jpg")
-![alt text](https://github.com/gary30404/tvm-yolov3/blob/master/result.jpg "result.jpg")
+<img src="dog.jpg" alt="" width="400"/>
+<img src="result.jpg" alt="" width="400"/>
 
 ## Reference
 
