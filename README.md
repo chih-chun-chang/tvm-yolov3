@@ -92,7 +92,7 @@ Mean inference time (std dev): 3.16 ms (0.03 ms)
 
 |               | Darknet        | TVM           | AutoTVM      |
 |-------------  | -------------: |:-------------:| -------:     |
-|cuda10.2       | 300~600ms      | ~170ms        | **7~8ms**    |
+|cuda10.2       | ~300ms      | ~170ms        | **7~8ms**    |
 |cuda10.2+cudnn7| ~13ms          | 8~9ms         |   -          |
 
 <img src="dog.jpg" alt="" width="400"/>
