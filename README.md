@@ -56,7 +56,7 @@ config = {
     'img': imagex,
     'cfg_path': 'yolov3.cfg',
     'weights_path': 'yolov3.weights',
-    'device_type': 'cuda-cudnn',
+    'device_type': 'cuda-cudnn', #cpu, cuda, cuda-cudnn
     'autotune': True,
     'log_file': 'yolov3_auto.log',
     'thresh': 0.5,
