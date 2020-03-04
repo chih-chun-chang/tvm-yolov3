@@ -15,7 +15,9 @@ from tvm.contrib import graph_runtime
 from tvm.contrib.download import download_testdata
 
 def run(config):
-    img_path = config['image_path']
+    #img_path = config['image_path']
+    img = config['img']
+    isinstance(img, np.ndarray)
     cfg_path = config['cfg_path']
     weights_path = config['weights_path']
     device_type = config['device_type']
@@ -89,7 +91,13 @@ def run(config):
     
     print("Loading image...")
     [neth, netw] = shape['data'][2:] # Current image shape is 608x608
-    data = tvm.relay.testing.darknet.load_image(img_path, netw, neth)
+    #data = tvm.relay.testing.darknet.load_image(img_path, netw, neth)
+    
+    img = img.transpose((2, 0, 1))
+    img = np.divide(img, 255.0)
+    img = np.flip(img, 0)
+    data = tvm.relay.testing.darknet._letterbox_image(img, netw, neth)
+
     m = graph_runtime.create(graph, lib, ctx)
 
 	# set inputs
@@ -119,7 +127,8 @@ def run(config):
         tvm_out.append(layer_out)
 
     # do the detection and bring up the bounding boxes
-    img = tvm.relay.testing.darknet.load_image_color(img_path)
+    #img = tvm.relay.testing.darknet.load_image_color(img_path)
+    
 
     _, im_h, im_w = img.shape
     dets = tvm.relay.testing.yolo_detection.fill_network_boxes((netw, neth), (im_w, im_h), thresh, 1, tvm_out)
@@ -136,6 +145,7 @@ def run(config):
                 if category == -1: 
                     category = j 
                 #labelstr.append(names[j] + " " + str(round(det['prob'][j], 4)))
+                labelstr.append(j)
         if category > -1: 
             imc, imh, imw = img.shape
             #width = int(imh * 0.006)
@@ -144,6 +154,7 @@ def run(config):
             #green = _get_color(1, offset, classes)
             #blue = _get_color(0, offset, classes)
             #rgb = [red, green, blue]
+            classes = labelstr[0]
             b = det['bbox']
             left = int((b.x-b.w/2.)*imw)
             right = int((b.x+b.w/2.)*imw)
@@ -161,10 +172,5 @@ def run(config):
             #_draw_box_width(im, left, top, right, bot, width, red, green, blue)
             #label = _get_label(font_path, ''.join(labelstr), rgb)
             #_draw_label(im, top + width, left, label, rgb)
-            r = dict()
-            r['left'] = left
-            r['right'] = right
-            r['top'] = top
-            r['bot'] = bot
-            results.append(r)
+            results.append([classes, left, top, right, bot])
     return results

@@ -1,7 +1,13 @@
 import tvm.relay.frontend.yolov3 as yolov3
+import cv2
+import numpy as np
+
+test_image = 'test.jpg'
+imagex = cv2.imread(test_image)
+imagex = np.array(imagex)
 
 config = {
-    'image_path': 'test.jpg',
+    'img': imagex,
     'cfg_path': 'yolov3.cfg',
     'weights_path': 'yolov3.weights',
     'device_type': 'cuda-cudnn',
