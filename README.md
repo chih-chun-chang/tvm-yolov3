@@ -30,6 +30,12 @@ This is a demo of yolov3 on TVM.
     
     > for other TVM intallation issues please refer to the [website](https://docs.tvm.ai/install/from_source.html)
     
+    5. 
+    ```
+    export TVM_HOME=/path/to/tvm-yolov3
+    export PYTHONPATH=$TVM_HOME/python:$TVM_HOME/topi/python:${PYTHONPATH}
+    ```
+    
 2. **Prepare Data**
 
     1. Download yolov3 [weights](https://pjreddie.com/media/files/yolov3.weights) and unzip it under `tvm-yolov3/`
