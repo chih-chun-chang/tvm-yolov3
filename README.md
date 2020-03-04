@@ -45,13 +45,19 @@ This is a demo of yolov3 on TVM.
 
 ```
 import tvm.relay.frontend.yolov3 as yolov3
+import cv2 
+import numpy as np
+
+test_image = 'test.jpg'
+imagex = cv2.imread(test_image)
+imagex = np.array(imagex)
 
 config = { 
-    'image_path': 'test.jpg',
+    'img': imagex,
     'cfg_path': 'yolov3.cfg',
     'weights_path': 'yolov3.weights',
-    'device_type': 'cuda-cudnn',            # device_type: llvm / cuda / cuda-cudnn
-    'autotune': True,                       # autotune: True / False
+    'device_type': 'cuda-cudnn',
+    'autotune': True,
     'log_file': 'yolov3_auto.log',
     'thresh': 0.5,
     'nms_thresh': 0.45
@@ -64,7 +70,10 @@ print(dets)
 * Sample Output: (bbox coordinates with confidences and label)
 
 ```
-[{'left': 0, 'right': 825, 'top': 180, 'bot': 691}, {'left': 464, 'right': 558, 'top': 190, 'bot': 443}, {'left': 274, 'right': 389, 'top': 129, 'bot': 462}, {'left': 213, 'right': 300, 'top': 130, 'bot': 374}, {'left': 10, 'right': 140, 'top': 95, 'bot': 409}]
+#[ [class, left, top, right, bottom],     # object 1
+#  [class, left, top, right, bottom],     # object 2
+#  ... ]
+[[60, 0, 180, 825, 691], [39, 464, 190, 558, 443], [39, 274, 129, 389, 462], [39, 213, 130, 300, 374], [39, 10, 95, 140, 409]]
 ```
 
 > !!!   The fastest method is cuda with autotuning acceleration while you have to run `python autotuning.py` first to generate the log file.
