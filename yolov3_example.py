@@ -1,4 +1,3 @@
-#import tvm.relay.frontend.yolov3 as yolov3
 import cv2
 import numpy as np
 import time
@@ -7,7 +6,7 @@ from tvm.relay.frontend.yolo import YOLO
 
 test_image = 'test.jpg'
 imagex = cv2.imread(test_image)
-imagex = np.array(imagex)
+
 
 config = {
     'cfg_path': 'yolov3.cfg',
