@@ -1,6 +1,7 @@
 import numpy as np
 import sys 
 import os
+import cv2
 
 import tvm 
 from tvm import relay
@@ -82,13 +83,8 @@ class YOLO:
 
     def run(self, img):
         isinstance(img, np.ndarray)
-        img = img.transpose((2, 0, 1))
-        img = np.divide(img, 255.0)
-        img = np.flip(img, 0)
-
         [neth, netw] = self.shape['data'][2:] 
         data = tvm.relay.testing.darknet._letterbox_image(img, netw, neth)
-
         # set inputs
         self.m.set_input('data', tvm.nd.array(data.astype('float32')))
         self.m.set_input(**self.params)
@@ -107,8 +103,8 @@ class YOLO:
             layer_out['output'] = self.m.get_output(i*4).asnumpy().reshape(out_shape)
             layer_out['classes'] = layer_attr[4]
             tvm_out.append(layer_out)
-        
-        _, im_h, im_w = img.shape
+       
+        im_h, im_w, _ = img.shape
         dets = tvm.relay.testing.yolo_detection.fill_network_boxes((netw, neth), (im_w, im_h), self.thresh, 1, tvm_out)
         last_layer = self.net.layers[self.net.n - 1]
 
@@ -124,22 +120,22 @@ class YOLO:
                         category = j
                     labelstr.append(j)
             if category > -1:
-                imc, imh, imw = img.shape
+                #imc, imh, imw = img.shape
                 classes = labelstr[0]
                 b = det['bbox']
-                left = int((b.x-b.w/2.)*imw)
-                right = int((b.x+b.w/2.)*imw)
-                top = int((b.y-b.h/2.)*imh)
-                bot = int((b.y+b.h/2.)*imh)
+                left = int((b.x-b.w/2.)*im_w)
+                right = int((b.x+b.w/2.)*im_w)
+                top = int((b.y-b.h/2.)*im_h)
+                bot = int((b.y+b.h/2.)*im_h)
 
                 if left < 0:
                     left = 0
-                if right > imw-1:
-                    right = imw-1
+                if right > im_w-1:
+                    right = im_w-1
                 if top < 0:
                     top = 0
-                if bot > imh-1:
-                    bot = imh-1
+                if bot > im_h-1:
+                    bot = im_h-1
                 results.append([classes, left, top, right, bot])
         
         return results

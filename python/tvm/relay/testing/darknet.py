@@ -60,8 +60,12 @@ def _resize_image(img, w_in, h_in):
 def load_image_color(test_image):
     """To load the image using opencv api and do preprocessing."""
     imagex = cv2.imread(test_image)
-    #imagex = cv2.cvtColor(imagex, cv2.COLOR_BGR2RGB)
-    imagex = np.array(imagex)
+    return imagex
+
+def convert_image(image):
+    """Convert the image with numpy."""
+    #imagex = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
+    imagex = np.array(image)
     imagex = imagex.transpose((2, 0, 1))
     imagex = np.divide(imagex, 255.0)
     imagex = np.flip(imagex, 0)
@@ -69,14 +73,16 @@ def load_image_color(test_image):
 
 def _letterbox_image(img, w_in, h_in):
     """To get the image in boxed format."""
-    imc, imh, imw = img.shape
+    imh, imw, imc = img.shape
     if (w_in / imw) < (h_in / imh):
         new_w = w_in
         new_h = imh * w_in // imw
     else:
         new_h = h_in
         new_w = imw * h_in // imh
-    resized = _resize_image(img, new_w, new_h)
+    dim = (new_w, new_h)
+    resized = cv2.resize(src=img, dsize=dim, interpolation=cv2.INTER_CUBIC)
+    resized = convert_image(resized)
     boxed = np.full((imc, h_in, w_in), 0.5, dtype=float)
     _, resizedh, resizedw = resized.shape
     boxed[:, int((h_in - new_h) / 2)
