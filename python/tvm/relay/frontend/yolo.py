@@ -13,6 +13,8 @@ from tvm import autotvm
 from tvm.contrib import graph_runtime
 from tvm.contrib.download import download_testdata
 
+import time
+
 class YOLO:
     def  __init__(self, config):
         cfg_path = config['cfg_path']
@@ -45,10 +47,10 @@ class YOLO:
                     raise NotImplementedError(err)
                 with autotvm.apply_history_best(log_file):
                     with relay.build_config(opt_level=3):
-                        graph, lib, self.params = relay.build_module.build(mod, target=target, params=params)
+                        graph, lib, params = relay.build_module.build(mod, target=target, params=params)
             else:
                 with relay.build_config(opt_level=3):
-                    graph, lib, self.params = relay.build_module.build(mod, target=target, params=params)
+                    graph, lib, params = relay.build_module.build(mod, target=target, params=params)
         elif device_type == 'cuda-cudnn':
             target = 'cuda -libs=cudnn'
             ctx = tvm.gpu()
@@ -58,10 +60,10 @@ class YOLO:
                     raise NotImplementedError(err)
                 with autotvm.apply_history_best(log_file):
                     with relay.build_config(opt_level=3):
-                        graph, lib, self.params = relay.build_module.build(mod, target=target, params=params)
+                        graph, lib, params = relay.build_module.build(mod, target=target, params=params)
             else:
                 with relay.build_config(opt_level=3):
-                    graph, lib, self.params = relay.build_module.build(mod, target=target, params=params)
+                    graph, lib, params = relay.build_module.build(mod, target=target, params=params)
         elif device_type == 'cuda':
             target = tvm.target.cuda()
             ctx = tvm.gpu()
@@ -71,15 +73,17 @@ class YOLO:
                     raise NotImplementedError(err)
                 with autotvm.apply_history_best(log_file):
                     with relay.build_config(opt_level=3):
-                        graph, lib, self.params = relay.build_module.build(mod, target=target, params=params)
+                        graph, lib, params = relay.build_module.build(mod, target=target, params=params)
             else:
                 with relay.build_config(opt_level=3):
-                    graph, lib, self.params = relay.build_module.build(mod, target=target, params=params)
+                    graph, lib, params = relay.build_module.build(mod, target=target, params=params)
         else:
             err = "Device type is not supported on this platform."
             raise NotImplementedError(err)
         
         self.m = graph_runtime.create(graph, lib, ctx)
+        self.m.set_input(**params)
+
 
     def run(self, img):
         isinstance(img, np.ndarray)
@@ -87,7 +91,6 @@ class YOLO:
         data = tvm.relay.testing.darknet._letterbox_image(img, netw, neth)
         # set inputs
         self.m.set_input('data', tvm.nd.array(data.astype('float32')))
-        self.m.set_input(**self.params)
         # execute
         self.m.run()
         # get outputs
@@ -107,9 +110,7 @@ class YOLO:
         im_h, im_w, _ = img.shape
         dets = tvm.relay.testing.yolo_detection.fill_network_boxes((netw, neth), (im_w, im_h), self.thresh, 1, tvm_out)
         last_layer = self.net.layers[self.net.n - 1]
-
         tvm.relay.testing.yolo_detection.do_nms_sort(dets, last_layer.classes, self.nms_thresh)
-
         results = []
         for det in dets:
             labelstr = []
@@ -137,6 +138,5 @@ class YOLO:
                 if bot > im_h-1:
                     bot = im_h-1
                 results.append([classes, left, top, right, bot])
-        
         return results
 

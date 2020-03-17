@@ -23,7 +23,8 @@ yolov3 = YOLO(config)
 
 # run
 start = time.time()
-dets = yolov3.run(imagex)
+for _ in range(100):
+    dets = yolov3.run(imagex)
 end = time.time()
-print(end-start)        # time
+print((end-start)/100)        # time
 print(dets)             # result
