@@ -80,15 +80,17 @@ def _letterbox_image(img, w_in, h_in):
     else:
         new_h = h_in
         new_w = imw * h_in // imh
-    dim = (new_w, new_h)
+    #dim = (new_w, new_h)
+    dim = (416, 416)
     resized = cv2.resize(src=img, dsize=dim, interpolation=cv2.INTER_CUBIC)
     resized = convert_image(resized)
-    boxed = np.full((imc, h_in, w_in), 0.5, dtype=float)
-    _, resizedh, resizedw = resized.shape
-    boxed[:, int((h_in - new_h) / 2)
-          :int((h_in - new_h) / 2) + resizedh, int((w_in - new_w) / 2)
-          :int((w_in - new_w) / 2) + resizedw] = resized
-    return boxed
+    #boxed = np.full((imc, h_in, w_in), 0.5, dtype=float)
+    #_, resizedh, resizedw = resized.shape
+    #boxed[:, int((h_in - new_h) / 2)
+    #      :int((h_in - new_h) / 2) + resizedh, int((w_in - new_w) / 2)
+    #      :int((w_in - new_w) / 2) + resizedw] = resized
+    #return boxed
+    return resized
 
 def load_image(image, resize_width, resize_height):
     """Load the image and convert to the darknet model format.

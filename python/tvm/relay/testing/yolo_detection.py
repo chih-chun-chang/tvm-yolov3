@@ -38,7 +38,9 @@ def nms_comparator(a, b):
     return diff
 
 def _correct_boxes(dets, w, h, netw, neth, relative):
-    new_w, new_h = (netw, (h*netw)//w) if (netw/w < neth/h) else ((w*neth//h), neth)
+    #new_w, new_h = (netw, (h*netw)//w) if (netw/w < neth/h) else ((w*neth//h), neth)
+    new_w = netw
+    new_h = neth
     for det in dets:
         b = det['bbox']
         b = b._replace(x=(b.x - (netw - new_w)/2/netw) / (new_w/netw))
@@ -255,7 +257,9 @@ def _draw_box(im, x1, y1, x2, y2, r, g, b):
     y2 = int(y2)
     x1 = int(x1)
     x2 = int(x2)
-    ac, ah, aw = im.shape
+    #ac, ah, aw = im.shape
+    aw, ah, ac = im.shape
+    print(im.shape)
     if x1 < 0:
         x1 = 0
     if x1 >= aw:

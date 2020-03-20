@@ -119,16 +119,17 @@ class YOLO:
                 if det['prob'][j] > self.thresh:
                     if category == -1:
                         category = j
-                    labelstr.append(j)
+                    #labelstr.append(j)
+                    break
             if category > -1:
                 #imc, imh, imw = img.shape
-                classes = labelstr[0]
+                #classes = labelstr[0]
+                classes = category
                 b = det['bbox']
                 left = int((b.x-b.w/2.)*im_w)
                 right = int((b.x+b.w/2.)*im_w)
                 top = int((b.y-b.h/2.)*im_h)
                 bot = int((b.y+b.h/2.)*im_h)
-
                 if left < 0:
                     left = 0
                 if right > im_w-1:

@@ -4,7 +4,7 @@ import time
 
 from tvm.relay.frontend.yolo import YOLO
 
-test_image = 'test.jpg'
+test_image = 'frame_1.jpg'
 imagex = cv2.imread(test_image)
 
 
@@ -14,8 +14,8 @@ config = {
     'device_type': 'cuda-cudnn',
     'autotune': True,
     'log_file': 'yolov3_auto.log',
-    'thresh': 0.5,
-    'nms_thresh': 0.45
+    'thresh': 0.3,
+    'nms_thresh': 0.4
 }
 
 # setup
@@ -23,8 +23,8 @@ yolov3 = YOLO(config)
 
 # run
 start = time.time()
-for _ in range(100):
-    dets = yolov3.run(imagex)
+#for _ in range(100):
+dets = yolov3.run(imagex)
 end = time.time()
 print((end-start)/100)        # time
 print(dets)             # result
